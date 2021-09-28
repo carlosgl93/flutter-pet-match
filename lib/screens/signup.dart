@@ -81,25 +81,26 @@ class SignUpScreen extends GetView<SignUpController> {
                   return controller.validatePassword(value!);
                 },
               ),
-              SizedBox(height: height * 0.025),
-              TextFormField(
-                controller: controller.passwordController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
-                ),
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: true,
-                onSaved: (value) {
-                  controller.passwordController =
-                      value as TextEditingController?;
-                },
-                validator: (value) {
-                  return controller.validatePassword(value!);
-                },
-              ),
+              // TODO: ADD A PASSWORD VERIFIER
+              // SizedBox(height: height * 0.025),
+              // TextFormField(
+              //   controller: controller.confirmPasswordController,
+              //   decoration: InputDecoration(
+              //     border: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(10)),
+              //     labelText: 'Verify Password',
+              //     prefixIcon: Icon(Icons.lock),
+              //   ),
+              //   keyboardType: TextInputType.visiblePassword,
+              //   obscureText: true,
+              //   onSaved: (value) {
+              //     controller.passwordController =
+              //         value as TextEditingController?;
+              //   },
+              //   validator: (value) {
+              //     return controller.verifyPasswords(value!, controller.userPassword);
+              //   },
+              
               SizedBox(height: height * 0.025),
               ConstrainedBox(
                 constraints: BoxConstraints.tightFor(width: width),
@@ -113,7 +114,7 @@ class SignUpScreen extends GetView<SignUpController> {
                         EdgeInsets.all(14),
                       ),
                     ),
-                    child: Text('Login'),
+                    child: Text('Create Account'),
                     onPressed: () {
                       checkSignUp();
                     }),

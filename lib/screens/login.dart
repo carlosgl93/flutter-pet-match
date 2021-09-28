@@ -36,7 +36,7 @@ class LoginScreen extends GetView<LoginController> {
                 'images/pet-match.png',
                 width: width * 0.5,
               ),
-              SizedBox(height: height * 0.025),
+              SizedBox(height: height * 0.0125),
               Text('Find a couple for your pet!'),
               SizedBox(height: height * 0.025),
               TextFormField(

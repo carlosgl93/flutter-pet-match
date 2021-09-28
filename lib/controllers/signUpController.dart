@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,15 +38,22 @@ class SignUpController extends GetxController {
   String? validatePassword(String value) {
     if (value.length <= 6) {
       return 'Enter a password longer than 6 characters';
-    } else if (value.toString() != userPassword) {
+    }
+    return null;
+  }
+
+  String? verifyPasswords(String value, String userPassword) {
+    log(userPassword);
+    log(value);
+    if (value != userPassword) {
       return 'Passwords do not match';
     }
-    
     return null;
   }
 
   // firebase Create user with email and password
   void createUserWithEmailAndPassword(userEmail, userPassword) async {
     // await
+    return print('Creating user with email and password');
   }
 }
