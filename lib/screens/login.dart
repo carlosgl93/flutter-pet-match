@@ -1,20 +1,28 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_match/services/auth.dart';
 import '../controllers/loginController.dart';
 
-class LoginScreen extends GetView<LoginController> {
+class LoginScreen extends GetWidget<LoginController> {
   @override
   Widget build(BuildContext context) {
+    final _authController = Get.find<AuthController>();
+    final LoginController controller = Get.put(LoginController());
     // global key used to identified form uniquely:
     GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
     void checkLogin() {
-    final isValid =   loginFormKey.currentState!.validate();
-    if (!isValid) {
-      return;
+      final isValid = loginFormKey.currentState!.validate();
+      if (!isValid) {
+        return;
+      }
+      print(loginFormKey);
+      String email = controller.emailController!.text.trim();
+      String password = controller.passwordController!.text;
+      loginFormKey.currentState!.save();
+
+      _authController.signIn(email, password);
     }
-    loginFormKey.currentState!.save();
-  }
-    final LoginController controller = Get.put(LoginController());
+
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -34,7 +42,7 @@ class LoginScreen extends GetView<LoginController> {
             children: [
               Image.asset(
                 'images/pet-match.png',
-                width: width * 0.5,
+                width: width * 0.35,
               ),
               SizedBox(height: height * 0.0125),
               Text('Find a couple for your pet!'),
@@ -67,8 +75,7 @@ class LoginScreen extends GetView<LoginController> {
                 keyboardType: TextInputType.visiblePassword,
                 obscureText: true,
                 onSaved: (value) {
-                  controller.passwordController =
-                      value as TextEditingController?;
+                  controller.userPassword = value as String;
                 },
                 validator: (value) {
                   return controller.validatePassword(value!);

@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pet_match/services/auth.dart';
 
-import '../controllers/signUpController.dart';
-
-class SignUpScreen extends GetView<SignUpController> {
+class SignUpScreen extends GetWidget<AuthController> {
+  final TextEditingController petNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    // firebase auth controller
+    final _authController = Get.find<AuthController>();
 
     // global key to identify signup form;
-  GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
+    GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
 
     void checkSignUp() {
-    final isValid = signUpFormKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    signUpFormKey.currentState!.save();
-  }
+      final isValid = signUpFormKey.currentState!.validate();
+      if (!isValid) {
+        return print('Form is not valid');
+      }
+      String petName = petNameController.text.trim();
+      String email = emailController.text.trim();
+      String password = passwordController.text;
+      signUpFormKey.currentState!.save();
 
-    final SignUpController controller = Get.put(SignUpController());
+      _authController.signUp(petName, email, password);
+    }
+
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -33,7 +41,7 @@ class SignUpScreen extends GetView<SignUpController> {
         width: width,
         height: height,
         child: SingleChildScrollView(
-          // START OF THE SIGN UP FORM
+            // START OF THE SIGN UP FORM
             child: Form(
           // key: controller.signUpFormKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -41,13 +49,29 @@ class SignUpScreen extends GetView<SignUpController> {
             children: [
               Image.asset(
                 'images/pet-match.png',
-                width: width * 0.5,
+                width: width * 0.35,
               ),
               SizedBox(height: height * 0.025),
               Text('Create an account for your most loved one!'),
               SizedBox(height: height * 0.025),
               TextFormField(
-                controller: controller.userEmailController,
+                controller: petNameController,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    labelText: 'What\'s your pet\s name?',
+                    prefixIcon: Icon(Icons.pets)),
+                keyboardType: TextInputType.name,
+                onSaved: (value) {
+                  petNameController.text = value!;
+                },
+                validator: (value) {
+                  return controller.validatePetName(value!);
+                },
+              ),
+              SizedBox(height: height * 0.025),
+              TextFormField(
+                controller: emailController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -56,7 +80,7 @@ class SignUpScreen extends GetView<SignUpController> {
                 ),
                 keyboardType: TextInputType.emailAddress,
                 onSaved: (value) {
-                  controller.userEmail = value!;
+                  emailController.text = value!;
                 },
                 validator: (value) {
                   return controller.validateEmail(value!);
@@ -64,7 +88,7 @@ class SignUpScreen extends GetView<SignUpController> {
               ),
               SizedBox(height: height * 0.025),
               TextFormField(
-                controller: controller.passwordController,
+                controller: passwordController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -74,14 +98,13 @@ class SignUpScreen extends GetView<SignUpController> {
                 keyboardType: TextInputType.visiblePassword,
                 obscureText: true,
                 onSaved: (value) {
-                  controller.passwordController =
-                      value as TextEditingController?;
+                  passwordController.text = value!;
                 },
                 validator: (value) {
                   return controller.validatePassword(value!);
                 },
               ),
-              // TODO: ADD A PASSWORD VERIFIER
+              // add A PASSWORD VERIFIER
               // SizedBox(height: height * 0.025),
               // TextFormField(
               //   controller: controller.confirmPasswordController,
@@ -100,7 +123,7 @@ class SignUpScreen extends GetView<SignUpController> {
               //   validator: (value) {
               //     return controller.verifyPasswords(value!, controller.userPassword);
               //   },
-              
+
               SizedBox(height: height * 0.025),
               ConstrainedBox(
                 constraints: BoxConstraints.tightFor(width: width),
@@ -116,7 +139,12 @@ class SignUpScreen extends GetView<SignUpController> {
                     ),
                     child: Text('Create Account'),
                     onPressed: () {
-                      checkSignUp();
+                      print(signUpFormKey);
+                      String name = petNameController.text;
+                      String email = emailController.text.trim();
+                      String password = passwordController.text;
+                      controller.signUp(name, email, password);
+                      
                     }),
               ),
               SizedBox(height: height * 0.025),
@@ -134,7 +162,7 @@ class SignUpScreen extends GetView<SignUpController> {
                         EdgeInsets.all(14),
                       ),
                     ),
-                    child: Text('Sign in to your account!'),
+                    child: Text('Login to your account'),
                     onPressed: () {
                       Get.toNamed('/');
                     }),
