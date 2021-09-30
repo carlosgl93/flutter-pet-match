@@ -6,6 +6,7 @@ import 'package:pet_match/screens/home.dart';
 
 import 'package:pet_match/screens/login.dart';
 import 'package:pet_match/screens/signup.dart';
+import 'package:pet_match/widgets/candidateDetail.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,10 @@ class PetMatch extends StatelessWidget {
         GetPage(name: '/', page: () => LoginScreen()),
         GetPage(name: '/signup', page: () => SignUpScreen()),
         GetPage(name: '/home', page: () => HomeScreen()),
+        GetPage(
+          name: '/profile/:candidateId',
+          page: () => CandidateDetail()
+        )
       ],
     );
   }

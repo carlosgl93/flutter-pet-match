@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pet_match/services/auth.dart';
 import '../controllers/loginController.dart';
 
-class LoginScreen extends GetWidget<LoginController> {
+class LoginScreen extends GetWidget<AuthController> {
   @override
   Widget build(BuildContext context) {
     final _authController = Get.find<AuthController>();
@@ -21,6 +21,7 @@ class LoginScreen extends GetWidget<LoginController> {
       loginFormKey.currentState!.save();
 
       _authController.signIn(email, password);
+      
     }
 
     final double height = MediaQuery.of(context).size.height;

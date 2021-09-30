@@ -63,6 +63,7 @@ class AuthController extends GetxController {
           .then((value) => displayName = userProfile!.displayName!);
 
       update();
+      Get.offAll(() => HomeScreen());
     } on FirebaseAuthException catch (e) {
       String title = e.code.replaceAll(RegExp('-'), ' ').capitalize!;
       String message = '';
